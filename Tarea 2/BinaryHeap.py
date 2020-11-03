@@ -44,7 +44,7 @@ class BinaryHeap:
         return min_node
 
     
-    def decrese_key(self, node, key):
+    def decrease_key(self, node, key):
         if node.key < key:
             return None
         
@@ -59,31 +59,43 @@ class BinaryHeap:
     def ajustar_raiz(self):
         actual_node = self.get_node(0)
         node_index = self.root.index(actual_node)
-        left_child_index = 2 * node_index
-        right_child_index = 2 * node_index + 1
+        left_child_index = 2 * node_index + 1
+        right_child_index = 2 * node_index + 2
         left_child = self.get_node(left_child_index)
         right_child = self.get_node(right_child_index)
 
         while(not (right_child is None and left_child is None)):
-            if left_child is not None and left_child.key < actual_node.key:
-                if left_child.key > actual_node.key and right_child is None:
-                    break
-                    
-                self.root[left_child_index] = actual_node
-                self.root[node_index] = left_child
-
-            elif right_child is not None and right_child.key < actual_node.key:
-                if right_child.key > actual_node.key and left_child is None:
-                    break
-                self.root[right_child_index] = actual_node
-                self.root[node_index] = right_child
             
-            elif left_child.key > actual_node.key and right_child.key > actual_node:
-                break
+            if (left_child is None):
+                if(right_child.key < actual_node.key):
+                    self.root[right_child_index] = actual_node
+                    self.root[node_index] = right_child
+                else:
+                    break
             
+            elif (right_child is None):
+                if(left_child.key < actual_node.key):
+                    self.root[left_child_index] = actual_node
+                    self.root[node_index] = left_child
+                else:
+                    break
+            
+            else:
+                if(left_child.key >= actual_node.key and right_child.key >= actual_node.key):
+                    break
+                else:
+                    if(left_child.key < right_child.key):
+                        menor = left_child
+                        menor_index = left_child_index
+                    else:
+                        menor = right_child
+                        menor_index = right_child_index
+                    self.root[menor_index] = actual_node
+                    self.root[node_index] = menor
+                          
             node_index = self.root.index(actual_node)
-            left_child_index = 2 * node_index
-            right_child_index = 2 * node_index + 1
+            left_child_index = 2 * node_index + 1
+            right_child_index = 2 * node_index + 2
             left_child = self.get_node(left_child_index)
             right_child = self.get_node(right_child_index)
      
