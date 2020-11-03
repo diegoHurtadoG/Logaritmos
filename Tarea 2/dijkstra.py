@@ -1,96 +1,94 @@
 import sys
 from Graph import *
-from BinaryHeap import *
 from FibonacciHeap import *
+from BinaryHeap import *
+import time
+
+def dijkstra(heap, vertices, vertice_inicial):
+    start_time = time.time()
+
+    distancias = [float('inf')]*len(vertices)
+    distancias[vertice_inicial - 1] = 0
+
+    for vertice in vertices:
+        numero_vertice = vertice.vertex_number
+        heap.insert(vertice, distancias[numero_vertice - 1])
+
+    while heap.empty() is False:
+        nodo = heap.extract_min()
+        vecinos = nodo.value.vecinos 
+        pesos = nodo.value.pesos
+
+        for i in range(len(vecinos)):
+            if distancias[vecinos[i].vertex_number - 1] > distancias[nodo.value.vertex_number - 1] + pesos[i]:
+                distancias[vecinos[i].vertex_number - 1] = distancias[nodo.value.vertex_number - 1] + pesos[i]
+                heap.decrease_key(heap.graph_vertexs[vecinos[i].vertex_number - 1], distancias[vecinos[i].vertex_number - 1])
+
+    elapsed_time = time.time() - start_time
+            
+    return distancias, elapsed_time
 
 
-# Argumento por consola
 tipo_heap = sys.argv[1]
 
-# Argumentos por input
-inp = input()
-n = int(inp.split(" ")[0])
-aristas = int(inp.split(" ")[1])
+numero_vertices_aristas = input().split(" ")
 
-# Validacion y definicion de estructura
-if (tipo_heap == "FibonacciHeap"):
-    heap = FibonacciHeap(n)
-elif (tipo_heap == "BinaryHeap"):
-    heap = BinaryHeap(n)
+numero_vertices = int(numero_vertices_aristas[0])
+numero_aristas = int(numero_vertices_aristas[1])
+
+if tipo_heap == "FibonacciHeap":
+    heap = FibonacciHeap(numero_vertices)
+
+elif tipo_heap == "BinaryHeap":
+    heap = BinaryHeap(numero_vertices)
+
 else:
-    raise Exception("Inserte tipo valido de estructura")
+    print("Heap no valido")
 
-# Donde voy a ir guardando los pesos con sus vertices
-caminos = []
 
-# Lleno la lista caminos[]
-for i in range(aristas):
-    punto = input()
-    temp = punto.split(" ")
+vertices = [None]*numero_vertices
 
-    # Cambio los valores de str a int pero los dejo como arreglo
-    for j in range(len(temp)):
-        temp[j] = int(temp[j])
+for i in range(numero_aristas):
+    arista = input().split(" ")
+    numero_primer_vertice = int(arista[0])
+    numero_segundo_vertice = int(arista[1])
+    peso = int(arista[2])
 
-    # Arreglo los indices para disminuir 1
-    temp[0] -= 1
-    temp[1] -= 1
+    if vertices[numero_primer_vertice - 1] is None:
+        primer_vertice = Vertex(numero_primer_vertice)
+        vertices[numero_primer_vertice - 1] = primer_vertice
 
-    # Caminos va a ser de la forma [[x1, x2, w1], [x1, x3, w2], ...] para cada linea del input, los valores son ints
-    caminos.append(temp)
+    if vertices[numero_segundo_vertice - 1] is None:
+        segundo_vertice = Vertex(numero_segundo_vertice)
+        vertices[numero_segundo_vertice - 1] = segundo_vertice
 
-# Esta es la ultima linea del input
-punto_inicial = input()
+    primer_vertice = vertices[numero_primer_vertice - 1]
+    segundo_vertice = vertices[numero_segundo_vertice - 1]
 
-#Aqui tengo que crear el grafo
-grafo = Graph(n)
+    primer_vertice.vecinos.append(segundo_vertice)
+    primer_vertice.pesos.append(peso)
 
-# x tiene la forma [origen, destino, peso]
-for x in caminos:
-    # Reviso para crear x1 -> x2
-    if not grafo.vertex_exist(x[0]):
-        grafo.add_vertex(Vertex(x[0]))
+    segundo_vertice.vecinos.append(primer_vertice)
+    segundo_vertice.pesos.append(peso)
 
-    # Reviso para crear x2 -> x1
-    if not grafo.vertex_exist(x[1]):
-        grafo.add_vertex(Vertex(x[1]))
+vertice_inicial = int(input())
 
-    # Estoy asegurado que los vertices existen
+distancias = dijkstra(heap, vertices, vertice_inicial)
 
-    # Agrego a x2 como vecino de x1 con peso w
-    grafo.get_vertex(x[0]).add_vecino(x[1], x[2])
+print(distancias)
 
-    # Agrego a x1 como vecino de x2 con peso w
-    grafo.get_vertex(x[1]).add_vecino(x[0], x[2])
 
-print(grafo)
 
-# Ojo con los indices
-def dijkstra(grafo, inicio):
 
-    distancias = [float('inf')] * n
-    distancias[int(inicio) - 1] = 0
 
-    for i in range(len(grafo.get_all_vertex())):
-        heap.insert(grafo.get_vertex(i), distancias[i])
 
-    while not heap.empty():
-        actual = heap.extract_min()  # Actual es nodo, tiene la forma valor (vertex), key (distancia)
 
-        vertice_actual = actual.get_value()
-        vecinos_va = vertice_actual.get_vecinos()  # Lista de ints
-        pesos_va = vertice_actual.get_pesos()  # Lista de ints
 
-        for i in range(len(vecinos_va)):
-            nodo_vecino = heap.graph_vertexs[vecinos_va[i] - 1]
-            if(nodo_vecino == None):
-                continue
-            nuevo_peso = actual.get_key() + pesos_va[i]
-            if nuevo_peso < nodo_vecino.get_key():
-                vertice_vecino = nodo_vecino.get_value()
-                distancias[vertice_vecino.get_number()] = nuevo_peso
-                heap.decrease_key(nodo_vecino, nuevo_peso)
 
-    return distancias
 
-print(dijkstra(grafo, punto_inicial))
+
+
+
+    
+
+
