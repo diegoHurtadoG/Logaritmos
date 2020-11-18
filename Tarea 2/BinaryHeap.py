@@ -38,8 +38,6 @@ class BinaryHeap:
                 self.min = self.root[0]
             else:
                 self.min = None
-            
-            self.graph_vertexs[min_node.value.vertex_number - 1] = None
 
         return min_node
 
@@ -103,7 +101,10 @@ class BinaryHeap:
 
     def ajustar_hoja(self, node):
         actual_node = node
-        node_index = self.root.index(actual_node)
+        try:
+            node_index = self.root.index(actual_node)
+        except:
+            return
         parent_index = node_index//2
         parent = self.root[parent_index]
 

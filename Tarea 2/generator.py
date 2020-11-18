@@ -6,7 +6,7 @@ MAX_PESO = 10**9
 n = int(sys.argv[1])
 p = float(sys.argv[2])
 
-f = open("Grafo.txt", "w")
+#f = open("Grafo.txt", "w")
 
 puntos = []
 
@@ -19,12 +19,12 @@ for i in range(n - 1):
         if p > random.random():
             puntos.append([puntos[i][0], puntos[j][1], random.randint(1, MAX_PESO)]) #Aqui estoy recorriendolo entero sin excluir ningun punto
 
-f.write(str(n) + " " + str(len(puntos)) + "\n")
-#print(n, len(puntos)) #Borrar si no se necesita
+#f.write(str(n) + " " + str(len(puntos)) + "\n")
+print(n, len(puntos)) #Borrar si no se necesita
 
 for i in range(len(puntos)): #Imprime los puntos en el formato necesario
-    f.write(str(puntos[i][0]) + " " + str(puntos[i][1]) + " " + str(puntos[i][2]) + "\n")
-    #print(puntos[i][0], puntos[i][1], puntos[i][2])
+    #f.write(str(puntos[i][0]) + " " + str(puntos[i][1]) + " " + str(puntos[i][2]) + "\n")
+    print(puntos[i][0], puntos[i][1], puntos[i][2])
 
-f.write(str(1))
-#print(1)
+#f.write(str(1))
+print(1)

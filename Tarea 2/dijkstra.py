@@ -5,7 +5,7 @@ from BinaryHeap import *
 import time
 
 def dijkstra(heap, vertices, vertice_inicial):
-    start_time = time.time()
+    #start_time = time.time()
 
     distancias = [float('inf')]*len(vertices)
     distancias[vertice_inicial - 1] = 0
@@ -24,9 +24,10 @@ def dijkstra(heap, vertices, vertice_inicial):
                 distancias[vecinos[i].vertex_number - 1] = distancias[nodo.value.vertex_number - 1] + pesos[i]
                 heap.decrease_key(heap.graph_vertexs[vecinos[i].vertex_number - 1], distancias[vecinos[i].vertex_number - 1])
 
-    elapsed_time = time.time() - start_time
+    #elapsed_time = time.time() - start_time
             
-    return distancias, elapsed_time
+    #return distancias, elapsed_time
+    return distancias
 
 
 tipo_heap = sys.argv[1]
