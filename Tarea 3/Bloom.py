@@ -2,9 +2,7 @@ import mmh3 as mm
 import BitVector as BV
 import random
 
-MAX_SEED = 100000 # Maximo del intervalo en el que se escogan semillas.
-m = 20
-k = 3
+MAX_SEED = 1000000 # Maximo del intervalo en el que se escogan semillas.
 
 class BloomFilter:
 
@@ -36,6 +34,8 @@ class BloomFilter:
         return self.bvector
 
 '''
+m = 20
+k = 3
 ##De aqui para abajo es un test
 bf = BloomFilter(m, k)
 

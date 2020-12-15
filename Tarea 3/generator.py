@@ -1,6 +1,5 @@
 import random
 import string
-import Bloom
 
 N_MIN = 4 #Minimo largo nombre usuario
 N_MAX = 10 #Maximo largo nombre usuario
@@ -9,8 +8,7 @@ M_MAX = 30 #Maximo largo mail
 
 caracteres = string.ascii_letters + string.digits
 
-def generar(m, k, n):
-    bf = Bloom.BloomFilter(m, k)
+def generar(n):
     file = open("L.txt", "w")
     names = []
     mails = []
@@ -32,7 +30,6 @@ def generar(m, k, n):
         mails.append(mail_buffer)
 
         # name_buffer y mail_buffer tienen nombre y mail
-        bf.insertar(name_buffer)
         file.write(name_buffer + " " + mail_buffer + "\n")
 
     #Aqui agrego el ultimo (para que no quede un espacio extra)
@@ -53,7 +50,6 @@ def generar(m, k, n):
     mails.append(mail_buffer)
 
     # name_buffer y mail_buffer tienen nombre y mail
-    bf.insertar(name_buffer)
     file.write(name_buffer + " " + mail_buffer)
     file.close()
-    return bf, names, mails
+    return names

@@ -3,17 +3,24 @@ import generator
 import random
 import sys
 import time
-import tracemalloc
+import Bloom
+import objsize
+import math
 
-tracemalloc.start()
 
-PORCENTAJE = 20 #Porcentaje que va a ser n de Q
-k = 5 #Numero de hashes
-q = int(sys.argv[1]) # Cantidad de Consultas
-n = int(q * PORCENTAJE / 100)
-m = 5 * n #Cantidad de bits del bitvector
+PORCENTAJE = 40 #Porcentaje que va a ser n de Q
+n = 2000
+m = int(sys.argv[1]) #Cantidad de bits del bitvector
+q = int(n * 100 / PORCENTAJE) # Cantidad de Consultas
+k = math.ceil(m * math.log(2, math.e) / n) #Numero de hashes
 
-bf, n_names, n_mails = generator.generar(m, k, n) #Aqui genero L.txt
+n_names = generator.generar(n) #Aqui genero L.txt
+
+bf = Bloom.BloomFilter(m, k)
+
+for element in n_names:
+    bf.insertar(element)
+
 file = open("L.txt", "r")
 
 q_names = [] #Nombres que estan en q y no en n
@@ -56,13 +63,11 @@ for p in all_names:
     else:
         negativos += 1
 elapsed_time = time.time() - start_time
-current_mem, peak_mem = tracemalloc.get_traced_memory()
 
-print("El peak de memoria fue: ", peak_mem)
-print("La memoria actual en uso es: ", current_mem)
+
 print("Tiempo de ejecucion (sin incluir generacion de variables ni archivo): ", elapsed_time)
-print("Positivos reales: ", positivos_reales)
+print("La memoria actual en uso es: ", objsize.get_deep_size(bf))
 print("Falsos positivos: ", falsos_positivos)
-print("Negativos: ", negativos)
 
-tracemalloc.stop()
+#for o in objsize.traverse_bfs(bf):
+#    print(o)
